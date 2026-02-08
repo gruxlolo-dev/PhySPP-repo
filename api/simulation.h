@@ -53,6 +53,15 @@ public:
   void enableCollisions() { physics->enableCollisions(true); }
   void disableCollisions() { physics->enableCollisions(false); }
 
+  void enableMHD() { physics->enableMHD(true); }
+  void disableMHD() { physics->enableMHD(false); }
+  
+  void enableRadiativeTransfer() { physics->enableRadiativeTransfer(true); }
+  void disableRadiativeTransfer() { physics->enableRadiativeTransfer(false); }
+  
+  void enableParticleInteractions() { physics->enableParticleInteractions(true); }
+  void disableParticleInteractions() { physics->enableParticleInteractions(false); }
+
   void setTimeScale(double scale) { physics->setTimeScale(scale); }
   void setTimeStep(double dt) { timeStep = dt; }
 

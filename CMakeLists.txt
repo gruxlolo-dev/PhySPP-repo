@@ -54,6 +54,9 @@ target_link_libraries(collision_camera_tracking PhySPP ${SDL2_LIBRARIES} ${OPENG
 add_executable(earth_3d_model examples/earth_3d_model.cpp)
 target_link_libraries(earth_3d_model PhySPP ${SDL2_LIBRARIES} ${OPENGL_LIBRARIES} ${GLUT_LIBRARIES} GLU)
 
+add_executable(advanced_blackhole examples/advanced_blackhole.cpp)
+target_link_libraries(advanced_blackhole PhySPP ${SDL2_LIBRARIES} ${OPENGL_LIBRARIES} ${GLUT_LIBRARIES} GLU)
+
 if(EXISTS ${CMAKE_SOURCE_DIR}/simple_demo.cpp)
     add_executable(simple_demo simple_demo.cpp physpp.cpp)
     target_link_libraries(simple_demo ${SDL2_LIBRARIES} ${OPENGL_LIBRARIES} GLU)

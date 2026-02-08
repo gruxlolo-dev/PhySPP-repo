@@ -1,7 +1,9 @@
 #pragma once
 #include "../graphics/effects.h"
 #include "../graphics/particles.h"
+#include "../graphics/blackhole_visualizer.h"
 #include "../physics/body.h"
+#include "../physics/relativity.h"
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <GL/glut.h>
@@ -65,6 +67,17 @@ public:
   }
 
   void drawBody(const Body &body) {
+    double rs = 2.0 * Physics::G * body.mass / (Physics::C * Physics::C);
+    
+    if(body.mass > 5.0 * Physics::SOLAR_MASS) {
+      double isco = Relativity::innerStableOrbit(body.mass, 0.0);
+      BlackHoleVisualizer::drawEventHorizon(body.pos, body.mass);
+      BlackHoleVisualizer::drawPhotonSphere(body.pos, body.mass);
+      BlackHoleVisualizer::drawAccretionDiskGlow(body.pos, isco, isco * 10);
+      BlackHoleVisualizer::drawGravitationalLensing(body.pos, body.mass, cameraPos);
+      return;
+    }
+    
     glPushMatrix();
     glTranslated(body.pos.x, body.pos.y, body.pos.z);
 

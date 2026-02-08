@@ -50,13 +50,12 @@ inline BodyPtr Jupiter(Vec3 offset = Vec3(5.2 * Physics::AU, 0, 0)) {
 }
 
 inline BodyPtr BlackHole(Vec3 pos, double mass = 10 * Physics::SOLAR_MASS) {
-  auto bh = std::make_shared<Body>(pos, Vec3(0, 0, 0), mass,
-                                   2.0 * Physics::G * mass /
-                                       (Physics::C * Physics::C),
-                                   BodyType::BLACK_HOLE);
+  double rs = 2.0 * Physics::G * mass / (Physics::C * Physics::C);
+  auto bh = std::make_shared<Body>(pos, Vec3(0, 0, 0), mass, rs * 100, BodyType::BLACK_HOLE);
   bh->name = "Black Hole";
-  bh->setColor(0.1f, 0.0f, 0.2f);
-  bh->setEmissive(0.5f);
+  bh->setColor(0.0f, 0.0f, 0.0f);
+  bh->setEmissive(0.0f);
+  bh->renderScale = 1.0;
   return bh;
 }
 

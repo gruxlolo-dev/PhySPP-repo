@@ -9,7 +9,11 @@ inline Vec3 gravity(const Body &a, const Body &b) {
   double dist = r.length();
   if (dist < 1e-10)
     return Vec3();
-  return r * (Physics::G * a.mass * b.mass / (dist * dist * dist));
+  
+  double softening = (a.radius + b.radius) * 0.01;
+  double dist_soft = sqrt(dist*dist + softening*softening);
+  
+  return r * (Physics::G * a.mass * b.mass / (dist_soft * dist_soft * dist_soft));
 }
 
 inline Vec3 relativisticGravity(const Body &a, const Body &b) {
@@ -18,15 +22,27 @@ inline Vec3 relativisticGravity(const Body &a, const Body &b) {
   if (dist < 1e-10)
     return Vec3();
 
-  Vec3 v = a.vel - b.vel;
-  double v2 = v.lengthSq();
-  double c2 = Physics::C * Physics::C;
-
-  Vec3 F = r * (Physics::G * a.mass * b.mass / (dist * dist * dist));
-
-  double correction =
-      1.0 + v2 / c2 - 2.0 * Physics::G * (a.mass + b.mass) / (dist * c2);
-  return F * correction;
+  const double c = Physics::C;
+  double rs = 2.0 * Physics::G * b.mass / (c * c);
+  
+  if(dist < rs * 1.5) {
+    return Vec3();
+  }
+  
+  double v = a.vel.length();
+  double beta = v / c;
+  double gamma = 1.0 / sqrt(1.0 - beta * beta);
+  
+  Vec3 n = r.normalized();
+  double v_radial = a.vel.dot(n);
+  
+  double pn_correction = 1.0 + (3.0 * v * v / (c * c)) + (4.0 * Physics::G * b.mass / (dist * c * c));
+  double force = Physics::G * a.mass * b.mass / (dist * dist) * pn_correction;
+  
+  Vec3 gravForce = n * force;
+  Vec3 frameDrag = Vec3(-r.y, r.x, 0) * (2.0 * Physics::G * b.mass / (c * c * dist * dist));
+  
+  return (gravForce + frameDrag) * gamma;
 }
 
 inline Vec3 tidalForce(const Body &a, const Body &b) {
@@ -55,5 +71,9 @@ inline Vec3 radiationPressure(const Body &source, const Body &target) {
   double pressure = source.luminosity / (4.0 * M_PI * dist * dist * Physics::C);
   double area = M_PI * target.radius * target.radius;
   return r.normalized() * (pressure * area);
+}
+
+inline double rocheLimit(const Body& primary, const Body& satellite) {
+  return 2.46 * primary.radius * pow(primary.mass / satellite.mass, 1.0/3.0);
 }
 } // namespace Forces
