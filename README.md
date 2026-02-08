@@ -40,13 +40,22 @@ make -j$(nproc)
 ```
 
 SPACE	Pause/Resume simulation
+
 Q	Quit program
+
 M	Toggle slow motion (1/5 speed)
+
 W / S	Zoom in/out
+
 Mouse	Rotate camera
+
 ← → ↑ ↓	Rotate camera (arrows)
+
 0-9	Follow specific object
+
 F	Toggle auto-follow (center of mass)
+
 O	Toggle orbits
+
 G	Toggle grid
-+ / -	Speed up/slow down time
+
