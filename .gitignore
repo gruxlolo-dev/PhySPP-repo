@@ -1,0 +1,30 @@
+# Build directories
+build/
+cmake-build-*/
+*.o
+*.a
+*.so
+
+# Executables
+simple_example
+blackhole_example
+full_demo_v2
+custom_physics
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+*.cmake
+
+# OS
+.DS_Store
+Thumbs.db
