@@ -8,17 +8,22 @@
 #include <memory>
 
 class Simulation {
-  std::unique_ptr<PhysicsEngine> physics;
-  std::unique_ptr<Renderer> renderer;
+  std::unique_ptr<PhysicsEngine> physicsPtr;
+  std::unique_ptr<Renderer> rendererPtr;
   bool running = true;
   bool paused = false;
   double timeStep = 3600.0;
 
 public:
+  PhysicsEngine* physics;
+  Renderer* renderer;
+
   Simulation(int width = 1280, int height = 720,
              const char *title = "PhySPP Simulation")
-      : physics(std::make_unique<PhysicsEngine>()),
-        renderer(std::make_unique<Renderer>(width, height, title)) {
+      : physicsPtr(std::make_unique<PhysicsEngine>()),
+        rendererPtr(std::make_unique<Renderer>(width, height, title)) {
+    physics = physicsPtr.get();
+    renderer = rendererPtr.get();
     renderer->setPerspective();
   }
 
@@ -41,6 +46,13 @@ public:
 
   void addBody(Vec3 pos, Vec3 vel, double mass, double radius) {
     physics->add(std::make_shared<Body>(pos, vel, mass, radius));
+  }
+
+  void addBodyWithVelocityColor(Vec3 pos, Vec3 vel, double mass, double radius) {
+    auto body = std::make_shared<Body>(pos, vel, mass, radius);
+    body->colorByVelocity = true;
+    body->maxVelocityForColor = 1e5;
+    physics->add(body);
   }
 
   void useRK4() { physics->setIntegrator(IntegratorType::RK4); }
@@ -91,6 +103,14 @@ public:
 
   void setCamera(Vec3 pos, Vec3 target) { renderer->setCamera(pos, target); }
 
+  int getBodyCount() const { return physics->getBodies().size(); }
+  double getTotalEnergy() const { return physics->totalEnergy(); }
+  Vec3 getCenterOfMass() const { return physics->centerOfMass(); }
+
+  void stop() { running = false; }
+  void pause() { paused = true; }
+  void resume() { paused = false; }
+
   void run() {
     SDL_Event event;
     SDL_SetRelativeMouseMode(SDL_TRUE);
@@ -140,18 +160,27 @@ public:
       if (autoFollow && !physics->getBodies().empty()) {
         if (followIndex < 0 || followIndex >= physics->getBodies().size()) {
           Vec3 com = physics->centerOfMass();
-          double maxDist = 0;
+          Vec3 minPos(1e20, 1e20, 1e20);
+          Vec3 maxPos(-1e20, -1e20, -1e20);
+          
           for (const auto &body : physics->getBodies()) {
-            double dist = (body->pos - com).length();
-            if (dist > maxDist)
-              maxDist = dist;
+            minPos.x = std::min(minPos.x, body->pos.x);
+            minPos.y = std::min(minPos.y, body->pos.y);
+            minPos.z = std::min(minPos.z, body->pos.z);
+            maxPos.x = std::max(maxPos.x, body->pos.x);
+            maxPos.y = std::max(maxPos.y, body->pos.y);
+            maxPos.z = std::max(maxPos.z, body->pos.z);
           }
-          double camDist = maxDist * 1.5;
-          if (camDist < 1e10)
-            camDist = 1e10;
-          if (camDist > 5e11)
-            camDist = 5e11;
-          renderer->setCamera(com + Vec3(camDist, camDist * 0.5, camDist * 0.3),
+          
+          double spanX = maxPos.x - minPos.x;
+          double spanY = maxPos.y - minPos.y;
+          double spanZ = maxPos.z - minPos.z;
+          double maxSpan = std::max({spanX, spanY, spanZ});
+          
+          double camDist = maxSpan * 1.2;
+          if (camDist < 1e9) camDist = 1e9;
+          
+          renderer->setCamera(com + Vec3(camDist * 0.7, camDist * 0.5, camDist * 0.7),
                               com);
         } else {
           auto &body = physics->getBodies()[followIndex];
@@ -254,12 +283,4 @@ public:
       }
     }
   }
-
-  int getBodyCount() const { return physics->getBodies().size(); }
-  double getTotalEnergy() const { return physics->totalEnergy(); }
-  Vec3 getCenterOfMass() const { return physics->centerOfMass(); }
-
-  void stop() { running = false; }
-  void pause() { paused = true; }
-  void resume() { paused = false; }
 };

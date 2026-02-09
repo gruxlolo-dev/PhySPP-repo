@@ -13,7 +13,7 @@ void mode1_ParticleAccretion() {
     Vec3 pos(r * cos(angle), r * sin(angle), (rand() % 1000 - 500) * 1e9);
     double v = sqrt(Physics::G * 50 * Physics::SOLAR_MASS / r) * 0.88;
     Vec3 vel(-v * sin(angle), v * cos(angle), 0);
-    sim.addBody(pos, vel, 1e19, 5e5);
+    sim.addBodyWithVelocityColor(pos, vel, 1e19, 5e5);
   }
 
   sim.useRK4();
@@ -46,7 +46,7 @@ void mode2_EarthAccretion() {
     Vec3 pos(r * cos(angle), r * sin(angle), (rand() % 500 - 250) * 1e9);
     double v = sqrt(Physics::G * 100 * Physics::SOLAR_MASS / r) * 0.9;
     Vec3 vel(-v * sin(angle), v * cos(angle), 0);
-    sim.addBody(pos, vel, 1e22, 1e6);
+    sim.addBodyWithVelocityColor(pos, vel, 1e22, 1e6);
   }
 
   sim.useRK4();

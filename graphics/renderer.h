@@ -75,6 +75,13 @@ public:
       BlackHoleVisualizer::drawPhotonSphere(body.pos, body.mass);
       BlackHoleVisualizer::drawAccretionDiskGlow(body.pos, isco, isco * 10);
       BlackHoleVisualizer::drawGravitationalLensing(body.pos, body.mass, cameraPos);
+      
+      if(!body.label.empty()) {
+        Vec3 screenPos = worldToScreen(body.pos);
+        if(screenPos.z > 0) {
+          drawText(body.label.c_str(), (int)screenPos.x + 10, (int)screenPos.y);
+        }
+      }
       return;
     }
     
@@ -92,9 +99,12 @@ public:
     glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuse);
     glMaterialfv(GL_FRONT, GL_EMISSION, emission);
 
+    double renderRadius = body.radius * body.renderScale;
+    if(renderRadius < 1e6) renderRadius = 1e6;
+
     GLUquadric *quad = gluNewQuadric();
     gluQuadricNormals(quad, GLU_SMOOTH);
-    gluSphere(quad, body.radius * body.renderScale, 32, 32);
+    gluSphere(quad, renderRadius, 16, 16);
     gluDeleteQuadric(quad);
 
     if (body.emissive > 0 && effects.isEnabled(VisualEffect::GLOW)) {
@@ -103,9 +113,32 @@ public:
 
     glPopMatrix();
 
+    if(!body.label.empty()) {
+      Vec3 screenPos = worldToScreen(body.pos);
+      if(screenPos.z > 0) {
+        drawText(body.label.c_str(), (int)screenPos.x + 10, (int)screenPos.y);
+      }
+    }
+
     if (body.showTrail && !body.trail.empty()) {
       drawTrail(body.trail, body.color);
     }
+  }
+
+  Vec3 worldToScreen(const Vec3 &worldPos) {
+    GLdouble modelview[16], projection[16];
+    GLint viewport[4];
+    GLdouble winX, winY, winZ;
+    
+    glGetDoublev(GL_MODELVIEW_MATRIX, modelview);
+    glGetDoublev(GL_PROJECTION_MATRIX, projection);
+    glGetIntegerv(GL_VIEWPORT, viewport);
+    
+    gluProject(worldPos.x, worldPos.y, worldPos.z,
+               modelview, projection, viewport,
+               &winX, &winY, &winZ);
+    
+    return Vec3(winX, height - winY, winZ);
   }
 
   void drawGlow(const Body &body) {
@@ -135,7 +168,8 @@ public:
 
     for (size_t i = 0; i < trail.size(); ++i) {
       float alpha = (float)i / trail.size();
-      glColor4f(color[0], color[1], color[2], alpha * 0.5f);
+      float fade = alpha * alpha;
+      glColor4f(color[0], color[1], color[2], fade * 0.6f);
       glVertex3d(trail[i].x, trail[i].y, trail[i].z);
     }
 

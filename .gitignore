@@ -10,6 +10,14 @@ simple_example
 blackhole_example
 full_demo_v2
 custom_physics
+binary_star_system
+asteroid_belt
+galaxy_collision
+moon_orbit
+supernova_explosion
+collision_demo
+performance_test
+advanced_engine_demo
 
 # IDE
 .vscode/

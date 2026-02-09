@@ -16,10 +16,10 @@ int main() {
   ball->setColor(1.0f, 0.2f, 0.2f);
   ball->elasticity = 0.9;
 
-  sim.addBody(Vec3(0, -1e7, 0), Vec3(0, 0, 0), 1e30, 5e6);
-  sim.addBody(Vec3(0, 5e7, 0), Vec3(0, 0, 0), 1e20, 1e6);
-  sim.addBody(Vec3(2e7, 6e7, 0), Vec3(0, 0, 0), 1e20, 1e6);
-  sim.addBody(Vec3(-2e7, 7e7, 0), Vec3(0, 0, 0), 1e20, 1e6);
+  sim.addBodyWithVelocityColor(Vec3(0, -1e7, 0), Vec3(0, 0, 0), 1e30, 5e6);
+  sim.addBodyWithVelocityColor(Vec3(0, 5e7, 0), Vec3(0, 0, 0), 1e20, 1e6);
+  sim.addBodyWithVelocityColor(Vec3(2e7, 6e7, 0), Vec3(0, 0, 0), 1e20, 1e6);
+  sim.addBodyWithVelocityColor(Vec3(-2e7, 7e7, 0), Vec3(0, 0, 0), 1e20, 1e6);
 
   sim.useVerlet();
   sim.enableCollisions();

@@ -6,13 +6,13 @@ int main() {
 
   Simulation sim(1920, 1080, "Planet Collision");
 
-  sim.addBody(Vec3(-Physics::AU * 0.5, 0, 0), Vec3(15000, 0, 0),
+  sim.addBodyWithVelocityColor(Vec3(-Physics::AU * 0.5, 0, 0), Vec3(15000, 0, 0),
               Physics::EARTH_MASS, Physics::EARTH_RADIUS);
 
-  sim.addBody(Vec3(Physics::AU * 0.5, 0, 0), Vec3(-15000, 0, 0),
+  sim.addBodyWithVelocityColor(Vec3(Physics::AU * 0.5, 0, 0), Vec3(-15000, 0, 0),
               Physics::EARTH_MASS * 1.5, Physics::EARTH_RADIUS * 1.2);
 
-  sim.addBody(Vec3(Physics::AU * 0.5 + 5e7, 0, 0), Vec3(-15000, 1000, 0),
+  sim.addBodyWithVelocityColor(Vec3(Physics::AU * 0.5 + 5e7, 0, 0), Vec3(-15000, 1000, 0),
               Physics::EARTH_MASS * 0.01, Physics::EARTH_RADIUS * 0.27);
 
   sim.useRK4();

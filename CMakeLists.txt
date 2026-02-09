@@ -57,6 +57,36 @@ target_link_libraries(earth_3d_model PhySPP ${SDL2_LIBRARIES} ${OPENGL_LIBRARIES
 add_executable(advanced_blackhole examples/advanced_blackhole.cpp)
 target_link_libraries(advanced_blackhole PhySPP ${SDL2_LIBRARIES} ${OPENGL_LIBRARIES} ${GLUT_LIBRARIES} GLU)
 
+add_executable(binary_star_system examples/binary_star_system.cpp)
+target_link_libraries(binary_star_system PhySPP ${SDL2_LIBRARIES} ${OPENGL_LIBRARIES} ${GLUT_LIBRARIES} GLU)
+
+add_executable(asteroid_belt examples/asteroid_belt.cpp)
+target_link_libraries(asteroid_belt PhySPP ${SDL2_LIBRARIES} ${OPENGL_LIBRARIES} ${GLUT_LIBRARIES} GLU)
+
+add_executable(galaxy_collision examples/galaxy_collision.cpp)
+target_link_libraries(galaxy_collision PhySPP ${SDL2_LIBRARIES} ${OPENGL_LIBRARIES} ${GLUT_LIBRARIES} GLU)
+
+add_executable(moon_orbit examples/moon_orbit.cpp)
+target_link_libraries(moon_orbit PhySPP ${SDL2_LIBRARIES} ${OPENGL_LIBRARIES} ${GLUT_LIBRARIES} GLU)
+
+add_executable(supernova_explosion examples/supernova_explosion.cpp)
+target_link_libraries(supernova_explosion PhySPP ${SDL2_LIBRARIES} ${OPENGL_LIBRARIES} ${GLUT_LIBRARIES} GLU)
+
+add_executable(collision_demo examples/collision_demo.cpp)
+target_link_libraries(collision_demo PhySPP ${SDL2_LIBRARIES} ${OPENGL_LIBRARIES} ${GLUT_LIBRARIES} GLU)
+
+add_executable(performance_test examples/performance_test.cpp)
+target_link_libraries(performance_test PhySPP)
+
+add_executable(advanced_engine_demo examples/advanced_engine_demo.cpp)
+target_link_libraries(advanced_engine_demo PhySPP ${SDL2_LIBRARIES} ${OPENGL_LIBRARIES} ${GLUT_LIBRARIES} GLU)
+
+add_executable(realistic_solar_system examples/realistic_solar_system.cpp)
+target_link_libraries(realistic_solar_system PhySPP ${SDL2_LIBRARIES} ${OPENGL_LIBRARIES} ${GLUT_LIBRARIES} GLU)
+
+add_executable(collision_physics_demo examples/collision_physics_demo.cpp)
+target_link_libraries(collision_physics_demo PhySPP ${SDL2_LIBRARIES} ${OPENGL_LIBRARIES} ${GLUT_LIBRARIES} GLU)
+
 if(EXISTS ${CMAKE_SOURCE_DIR}/simple_demo.cpp)
     add_executable(simple_demo simple_demo.cpp physpp.cpp)
     target_link_libraries(simple_demo ${SDL2_LIBRARIES} ${OPENGL_LIBRARIES} GLU)

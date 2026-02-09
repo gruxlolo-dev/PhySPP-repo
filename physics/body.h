@@ -21,18 +21,34 @@ public:
   double mass, radius;
   BodyType type;
   std::string name;
+  std::string label;
 
   float color[3] = {1, 1, 1};
   float emissive = 0.0f;
   double renderScale = 1.0;
   bool showTrail = true;
   std::vector<Vec3> trail;
+  bool isFragment = false;
+  bool colorByVelocity = false;
+  double maxVelocityForColor = 1e5;
+  int flags = 0;
 
   double temperature = 0;
   double luminosity = 0;
   double elasticity = 0.5;
   double friction = 0.1;
   bool destroyed = false;
+  double kineticEnergyAtCollision = 0;
+  
+  enum class CollisionType {
+    NONE,
+    ELASTIC_BOUNCE,
+    MERGE,
+    FRAGMENTATION,
+    ANNIHILATION,
+    NUCLEAR_REACTION
+  };
+  CollisionType lastCollisionType = CollisionType::NONE;
 
   Body(Vec3 pos, Vec3 vel, double mass, double radius,
        BodyType type = BodyType::PLANET)
@@ -62,6 +78,19 @@ public:
       trail.push_back(pos);
       if (trail.size() > maxPoints)
         trail.erase(trail.begin());
+    }
+  }
+
+  void updateColorByVelocity() {
+    if (colorByVelocity && !destroyed) {
+      double speed = vel.length();
+      if (std::isfinite(speed) && speed >= 0) {
+        float intensity = std::min(1.0, speed / maxVelocityForColor);
+        color[0] = 0.2f + intensity * 0.8f;
+        color[1] = 0.2f + (1.0f - intensity) * 0.6f;
+        color[2] = 0.2f;
+        emissive = intensity * 0.5f;
+      }
     }
   }
 

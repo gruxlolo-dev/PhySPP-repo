@@ -45,4 +45,34 @@ inline void rk4(Body &body, double dt, const ForceFunc &force) {
   body.vel = v0 + (k1v + k2v * 2.0 + k3v * 2.0 + k4v) * (dt / 6.0);
   body.acc = k4v;
 }
+
+inline void leapfrog(Body &body, double dt, const ForceFunc &force) {
+  Vec3 acc = force(body) / body.mass;
+  body.vel += acc * (dt * 0.5);
+  body.pos += body.vel * dt;
+  Vec3 newAcc = force(body) / body.mass;
+  body.vel += newAcc * (dt * 0.5);
+  body.acc = newAcc;
+}
+
+inline void yoshida4(Body &body, double dt, const ForceFunc &force) {
+  const double w0 = -1.702414383919315;
+  const double w1 = 1.351207191959658;
+  const double c1 = w1 / 2.0;
+  const double c2 = (w0 + w1) / 2.0;
+  const double d1 = w1;
+  const double d2 = w0;
+  
+  body.pos += body.vel * (c1 * dt);
+  Vec3 acc = force(body) / body.mass;
+  body.vel += acc * (d1 * dt);
+  body.pos += body.vel * (c2 * dt);
+  acc = force(body) / body.mass;
+  body.vel += acc * (d2 * dt);
+  body.pos += body.vel * (c2 * dt);
+  acc = force(body) / body.mass;
+  body.vel += acc * (d1 * dt);
+  body.pos += body.vel * (c1 * dt);
+  body.acc = acc;
+}
 } // namespace Integrators

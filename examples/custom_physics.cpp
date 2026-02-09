@@ -2,48 +2,48 @@
 #include <iostream>
 
 int main() {
-  std::cout << "Custom Physics Demo\n\n";
+    PhysicsEngine engine;
 
-  PhysicsEngine engine;
+    engine.setIntegrator(IntegratorType::LEAPFROG);
+    engine.enableRelativistic(false);
+    engine.enableCollisions(false);
+    engine.enableConstraints(false);
+    engine.enableSleeping(false);
 
-  engine.setIntegrator(IntegratorType::RK4);
-  engine.enableRelativistic(true);
-  engine.enableCollisions(true);
+    auto sun = engine.createBody();
+    sun->pos = {0, 0, 0};
+    sun->vel = {0, 0, 0};
+    sun->mass = Physics::SOLAR_MASS;
+    sun->flags = BodyFlags::STATIC | BodyFlags::NO_INTEGRATION;
 
-  auto sun =
-      std::make_shared<Body>(Vec3(0, 0, 0), Vec3(0, 0, 0), Physics::SOLAR_MASS,
-                             Physics::SOLAR_RADIUS, BodyType::STAR);
-  sun->setColor(1.0f, 0.9f, 0.2f);
-  sun->setEmissive(1.0f);
-  engine.add(sun);
+    double r = Physics::AU;
+    double v = std::sqrt(Physics::G * Physics::SOLAR_MASS / r);
 
-  double r = Physics::AU;
-  double v = sqrt(Physics::G * Physics::SOLAR_MASS / r);
-  auto planet =
-      std::make_shared<Body>(Vec3(r, 0, 0), Vec3(0, v, 0), Physics::EARTH_MASS,
-                             Physics::EARTH_RADIUS, BodyType::PLANET);
-  planet->setColor(0.2f, 0.8f, 0.3f);
-  planet->elasticity = 0.9;
-  planet->friction = 0.1;
-  engine.add(planet);
+    auto earth = engine.createBody();
+    earth->pos = {r, 0, 0};
+    earth->vel = {0, v, 0};
+    earth->mass = Physics::EARTH_MASS;
+    earth->flags = static_cast<int>(BodyFlags::GRAVITY_ONLY);
 
-  std::cout << "Simulating 1 year...\n";
-  double dt = 3600 * 24;
+    engine.finalize();
 
-  for (int day = 0; day < 365; day++) {
-    engine.step(dt);
+    constexpr double dt = 3600.0;
+    constexpr long long years = 100;
+    constexpr long long stepsPerYear = static_cast<long long>(365.25 * 24);
+    constexpr long long totalSteps = years * stepsPerYear;
 
-    if (day % 30 == 0) {
-      std::cout << "Day " << day << ": ";
-      std::cout << "Distance = " << planet->pos.length() / Physics::AU
-                << " AU, ";
-      std::cout << "Energy = " << engine.totalEnergy() << " J\n";
+    std::cout << "Simulating " << years << " years...\n";
+    
+    for (long long i = 0; i < totalSteps; ++i) {
+        engine.stepFast(dt);
+        if(i % 10000 == 0) {
+            std::cout << "\rProgress: " << (i * 100 / totalSteps) << "%" << std::flush;
+        }
     }
-  }
 
-  std::cout << "\nFinal position: " << planet->pos << "\n";
-  std::cout << "Final velocity: " << planet->vel << "\n";
-  std::cout << "Total energy: " << engine.totalEnergy() << " J\n";
-
-  return 0;
+    std::cout << "\n\nFinal r = " << earth->pos.length() / Physics::AU << " AU\n";
+    std::cout << "Final v = " << earth->vel.length() << " m/s\n";
+    std::cout << "Expected v = " << v << " m/s\n";
+    
+    return 0;
 }
