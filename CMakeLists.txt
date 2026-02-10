@@ -57,6 +57,9 @@ target_link_libraries(earth_3d_model PhySPP ${SDL2_LIBRARIES} ${OPENGL_LIBRARIES
 add_executable(advanced_blackhole examples/advanced_blackhole.cpp)
 target_link_libraries(advanced_blackhole PhySPP ${SDL2_LIBRARIES} ${OPENGL_LIBRARIES} ${GLUT_LIBRARIES} GLU)
 
+add_executable(neutron_collision examples/neutron_collision.cpp)
+target_link_libraries(neutron_collision PhySPP ${SDL2_LIBRARIES} ${OPENGL_LIBRARIES} ${GLUT_LIBRARIES} GLU)
+
 add_executable(binary_star_system examples/binary_star_system.cpp)
 target_link_libraries(binary_star_system PhySPP ${SDL2_LIBRARIES} ${OPENGL_LIBRARIES} ${GLUT_LIBRARIES} GLU)
 
@@ -86,6 +89,18 @@ target_link_libraries(realistic_solar_system PhySPP ${SDL2_LIBRARIES} ${OPENGL_L
 
 add_executable(collision_physics_demo examples/collision_physics_demo.cpp)
 target_link_libraries(collision_physics_demo PhySPP ${SDL2_LIBRARIES} ${OPENGL_LIBRARIES} ${GLUT_LIBRARIES} GLU)
+
+add_executable(deterministic_physics_demo examples/deterministic_physics_demo.cpp)
+target_link_libraries(deterministic_physics_demo PhySPP ${SDL2_LIBRARIES} ${OPENGL_LIBRARIES} ${GLUT_LIBRARIES} GLU)
+
+add_executable(nuclear_physics_demo examples/nuclear_physics_demo.cpp)
+target_link_libraries(nuclear_physics_demo PhySPP ${SDL2_LIBRARIES} ${OPENGL_LIBRARIES} ${GLUT_LIBRARIES} GLU)
+
+add_executable(stellar_fusion examples/stellar_fusion.cpp)
+target_link_libraries(stellar_fusion PhySPP ${SDL2_LIBRARIES} ${OPENGL_LIBRARIES} ${GLUT_LIBRARIES} GLU)
+
+add_executable(big_bang examples/big_bang.cpp)
+target_link_libraries(big_bang PhySPP ${SDL2_LIBRARIES} ${OPENGL_LIBRARIES} ${GLUT_LIBRARIES} GLU)
 
 if(EXISTS ${CMAKE_SOURCE_DIR}/simple_demo.cpp)
     add_executable(simple_demo simple_demo.cpp physpp.cpp)

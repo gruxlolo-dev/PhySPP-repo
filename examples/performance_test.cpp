@@ -44,7 +44,7 @@ int main() {
 
     for (long long i = 0; i < totalSteps; ++i) {
         engine.stepFast(dt);
-        
+
         if (i % 10000 == 0) {
             std::cout << "\rProgress: " << (i * 100 / totalSteps) << "%" << std::flush;
         }

@@ -33,10 +33,10 @@ int main() {
     constexpr long long totalSteps = years * stepsPerYear;
 
     std::cout << "Simulating " << years << " years...\n";
-    
+
     for (long long i = 0; i < totalSteps; ++i) {
         engine.stepFast(dt);
-        if(i % 10000 == 0) {
+        if (i % 10000 == 0) {
             std::cout << "\rProgress: " << (i * 100 / totalSteps) << "%" << std::flush;
         }
     }
@@ -44,6 +44,6 @@ int main() {
     std::cout << "\n\nFinal r = " << earth->pos.length() / Physics::AU << " AU\n";
     std::cout << "Final v = " << earth->vel.length() << " m/s\n";
     std::cout << "Expected v = " << v << " m/s\n";
-    
+
     return 0;
 }
