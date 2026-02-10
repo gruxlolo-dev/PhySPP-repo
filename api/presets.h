@@ -92,4 +92,4 @@ inline BodyPtr Comet(Vec3 pos, Vec3 vel) {
   comet->showTrail = true;
   return comet;
 }
-} // namespace Presets
+}

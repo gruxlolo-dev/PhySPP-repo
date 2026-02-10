@@ -53,4 +53,4 @@ using ::Presets::Jupiter;
 using ::Presets::Mars;
 using ::Presets::NeutronStar;
 using ::Presets::Sun;
-} // namespace PhySPP
+}

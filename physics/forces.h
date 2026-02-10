@@ -76,4 +76,4 @@ inline Vec3 radiationPressure(const Body &source, const Body &target) {
 inline double rocheLimit(const Body& primary, const Body& satellite) {
   return 2.46 * primary.radius * pow(primary.mass / satellite.mass, 1.0/3.0);
 }
-} // namespace Forces
+}

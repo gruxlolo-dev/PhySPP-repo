@@ -17,4 +17,4 @@ constexpr double JUPITER_MASS = 1.898e27;
 constexpr double SOLAR_RADIUS = 6.96e8;
 constexpr double EARTH_RADIUS = 6.371e6;
 constexpr double JUPITER_RADIUS = 6.9911e7;
-} // namespace Physics
+}

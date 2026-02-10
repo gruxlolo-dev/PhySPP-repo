@@ -118,7 +118,7 @@ public:
         SDL_Event event;
         SDL_SetRelativeMouseMode(SDL_TRUE);
         int followIndex = -1;
-        bool autoFollow = false; // Wyłącz auto-follow
+        bool autoFollow = false;
         int frameCount = 0;
         auto lastPrint = std::chrono::high_resolution_clock::now();
 
@@ -141,17 +141,17 @@ public:
             }
 
             if (!paused) {
-                // timeScale kontroluje ile kroków fizyki wykonujemy na klatkę
+
                 double stepsToRun = physics->getTimeScale();
                 int fullSteps = (int) stepsToRun;
                 double fractionalStep = stepsToRun - fullSteps;
 
-                // Wykonaj pełne kroki
+
                 for (int i = 0; i < fullSteps; i++) {
                     physics->step(timeStep);
                 }
 
-                // Wykonaj częściowy krok z prawdopodobieństwem
+
                 static double accumulator = 0.0;
                 accumulator += fractionalStep;
                 if (accumulator >= 1.0) {
@@ -230,7 +230,7 @@ public:
             renderer->drawText(info, 10, 40);
 
             renderer->swap();
-            SDL_Delay(16); // Stałe 60 FPS
+            SDL_Delay(16);
         }
     }
 

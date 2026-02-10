@@ -75,4 +75,4 @@ inline void yoshida4(Body &body, double dt, const ForceFunc &force) {
   body.pos += body.vel * (c1 * dt);
   body.acc = acc;
 }
-} // namespace Integrators
+}

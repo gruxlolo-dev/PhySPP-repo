@@ -189,7 +189,7 @@ public:
             return;
         }
 
-        // NIE mnożymy dt przez timeScale - dt zawsze taki sam dla stałej fizyki
+
         stepCount++;
 
         if (useAdaptiveTimestep) {
@@ -301,20 +301,20 @@ public:
         Vec3 relativeVel = a->vel - b->vel;
         double relativeSpeed = relativeVel.length();
 
-        // Energia kinetyczna w układzie środka masy
+
         double reducedMass = (a->mass * b->mass) / totalMass;
         double collisionEnergy = 0.5 * reducedMass * relativeSpeed * relativeSpeed;
 
-        // Progi energetyczne
-        const double ELASTIC_THRESHOLD = 1e20; // Niska energia - odbicie
-        const double MERGE_THRESHOLD = 1e25; // Średnia energia - połączenie
-        const double FRAGMENT_THRESHOLD = 1e30; // Wysoka energia - fragmentacja
-        const double ANNIHILATION_THRESHOLD = 1e35; // Bardzo wysoka - anihilacja
+
+        const double ELASTIC_THRESHOLD = 1e20;
+        const double MERGE_THRESHOLD = 1e25;
+        const double FRAGMENT_THRESHOLD = 1e30;
+        const double ANNIHILATION_THRESHOLD = 1e35;
 
         a->kineticEnergyAtCollision = collisionEnergy;
         b->kineticEnergyAtCollision = collisionEnergy;
 
-        // 1. NISKA ENERGIA - Odbicie elastyczne
+
         if (collisionEnergy < ELASTIC_THRESHOLD) {
             Vec3 normal = (b->pos - a->pos).normalized();
             Vec3 relVel = a->vel - b->vel;
